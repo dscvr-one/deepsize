@@ -159,6 +159,14 @@ mod indexmap_impl {
     }
 }
 
+#[cfg(feature="candid")]
+mod candid_impl {
+    use crate::known_deep_size;
+    use candid::Principal;
+
+    known_deep_size!(0; Principal);
+}
+
 #[cfg(feature = "chrono")]
 mod chrono_impl {
     use crate::known_deep_size;
