@@ -157,7 +157,7 @@ pub struct Context {
 
 impl Context {
     /// Creates a new empty context for use in the `deep_size` functions
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             arcs: GenericSet::new(),
             rcs: GenericSet::new(),
