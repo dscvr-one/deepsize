@@ -56,9 +56,12 @@ fn match_fields(fields: &syn::Fields) -> TokenStream {
         Fields::Named(ref fields) => {
             let recurse = fields.named.iter().map(|f| {
                 let name = &f.ident;
-                quote_spanned! {f.span()=>
-                    ::deepsize::DeepSizeOf::deep_size_of_children(&self.#name, context)
-                }
+                let func = quote_spanned! (f.span()=>
+                    ::deepsize::DeepSizeOf::deep_size_of_children
+                );
+                quote! (
+                    #func(&self.#name, context)
+                )
             });
             quote! {
                 0 #(+ #recurse)*
@@ -67,8 +70,11 @@ fn match_fields(fields: &syn::Fields) -> TokenStream {
         Fields::Unnamed(ref fields) => {
             let recurse = fields.unnamed.iter().enumerate().map(|(i, f)| {
                 let index = Index::from(i);
-                quote_spanned! {f.span()=>
-                    ::deepsize::DeepSizeOf::deep_size_of_children(&self.#index, context)
+                let func = quote_spanned! (f.span()=>
+                    ::deepsize::DeepSizeOf::deep_size_of_children
+                );
+                quote! {
+                    #func(&self.#index, context)
                 }
             });
             quote! {
@@ -87,8 +93,11 @@ fn match_enum_fields(fields: &syn::Fields) -> TokenStream {
         Fields::Named(ref fields) => {
             let recurse = fields.named.iter().map(|f| {
                 let name = &f.ident;
-                quote_spanned! {f.span()=>
-                    ::deepsize::DeepSizeOf::deep_size_of_children(#name, context)
+                let func = quote_spanned! {f.span()=>
+                    ::deepsize::DeepSizeOf::deep_size_of_children
+                };
+                quote! {
+                    #func(#name, context)
                 }
             });
             quote! {
@@ -98,8 +107,11 @@ fn match_enum_fields(fields: &syn::Fields) -> TokenStream {
         Fields::Unnamed(ref fields) => {
             let recurse = fields.unnamed.iter().enumerate().map(|(i, f)| {
                 let i = syn::Ident::new(&format!("_{}", i), proc_macro2::Span::call_site());
-                quote_spanned! {f.span()=>
-                    ::deepsize::DeepSizeOf::deep_size_of_children(#i, context)
+                let func = quote_spanned! {f.span()=>
+                    ::deepsize::DeepSizeOf::deep_size_of_children
+                };
+                quote! {
+                    #func(#i, context)
                 }
             });
             quote! {
