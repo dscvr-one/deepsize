@@ -176,7 +176,7 @@ mod chrono_impl {
         NaiveDate, NaiveTime, NaiveDateTime, IsoWeek,
         Duration, Month, Weekday,
         FixedOffset, Local, Utc,
-        {T: TimeZone} DateTime<T>, {T: TimeZone} Date<T>,
+        {T: TimeZone} DateTime<T>,
     );
 }
 
@@ -199,6 +199,36 @@ mod actix_impl {
     impl<T: actix::Actor> DeepSizeOf for Addr<T> {
         fn deep_size_of_children(&self, _context: &mut Context) -> usize {
             0
+        }
+    }
+}
+
+#[cfg(feature = "serde_bytes")]
+mod serde_bytes_impl {
+    use crate::{Context, DeepSizeOf};
+    use serde_bytes::{ByteBuf, Bytes};
+
+    impl DeepSizeOf for ByteBuf {
+        fn deep_size_of(&self) -> usize {
+            use std::ops::Deref;
+
+            self.deref().deep_size_of()
+        }
+
+        fn deep_size_of_children(&self, _: &mut Context) -> usize {
+            unreachable!()
+        }
+    }
+
+    impl DeepSizeOf for Bytes {
+        fn deep_size_of(&self) -> usize {
+            use std::ops::Deref;
+
+            self.deref().deep_size_of()
+        }
+
+        fn deep_size_of_children(&self, _: &mut Context) -> usize {
+            unreachable!()
         }
     }
 }
