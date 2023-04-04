@@ -193,22 +193,45 @@ mod test_candid {
         assert_eq!(candid::Principal::anonymous().deep_size_of(), 30);
     }
 }
-#[cfg(feature = "serde_bytes")]
+#[cfg(all(feature = "serde_bytes", feature = "derive"))]
 mod test_serde_bytes {
     use super::*;
 
     #[test]
     fn test_bytebuf() {
         use serde_bytes::ByteBuf;
-        let buf = ByteBuf::from(vec![1, 2, 3, 4]);
-        assert_eq!(buf.deep_size_of(), 28);
+
+        #[derive(DeepSizeOf)]
+        struct Test {
+            a: u32,
+            b: ByteBuf,
+        }
+
+        let t = Test {
+            a: 42,
+            b: ByteBuf::from(vec![1, 2, 3, 4]),
+        };
+
+        assert_eq!(t.deep_size_of(), 32);
     }
 
     #[test]
     fn test_bytes() {
         use serde_bytes::Bytes;
-        let v: Vec<u8> = vec![1, 2, 3, 4];
-        let bytes = Bytes::new(&v);
-        assert_eq!(bytes.deep_size_of(), 4);
+
+        #[derive(DeepSizeOf)]
+        struct Test<'a> {
+            a: u32,
+            b: &'a Bytes,
+        }
+
+        let v: Vec<u8> = vec![1, 2, 3, 4, 100];
+
+        let t = Test {
+            a: 42,
+            b: Bytes::new(&v),
+        };
+
+        assert_eq!(t.deep_size_of(), 24);
     }
 }

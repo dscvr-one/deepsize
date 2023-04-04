@@ -159,7 +159,7 @@ mod indexmap_impl {
     }
 }
 
-#[cfg(feature="candid")]
+#[cfg(feature = "candid")]
 mod candid_impl {
     use crate::known_deep_size;
     use candid::Principal;
@@ -216,7 +216,7 @@ mod serde_bytes_impl {
         }
 
         fn deep_size_of_children(&self, _: &mut Context) -> usize {
-            unreachable!()
+            0
         }
     }
 
@@ -228,7 +228,7 @@ mod serde_bytes_impl {
         }
 
         fn deep_size_of_children(&self, _: &mut Context) -> usize {
-            unreachable!()
+            0
         }
     }
 }
