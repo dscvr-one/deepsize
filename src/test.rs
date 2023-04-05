@@ -209,10 +209,10 @@ mod test_serde_bytes {
 
         let t = Test {
             a: 42,
-            b: ByteBuf::from(vec![1, 2, 3, 4]),
+            b: ByteBuf::from(vec![1, 2, 3, 4, 100]),
         };
 
-        assert_eq!(t.deep_size_of(), 32);
+        assert_eq!(t.deep_size_of(), 37);
     }
 
     #[test]
@@ -225,7 +225,7 @@ mod test_serde_bytes {
             b: &'a Bytes,
         }
 
-        let v: Vec<u8> = vec![1, 2, 3, 4, 100];
+        let v: Vec<u8> = vec![1, 2, 3, 4, 100, 200];
 
         let t = Test {
             a: 42,

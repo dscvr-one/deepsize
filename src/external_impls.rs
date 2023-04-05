@@ -211,24 +211,23 @@ mod serde_bytes_impl {
     impl DeepSizeOf for ByteBuf {
         fn deep_size_of(&self) -> usize {
             use std::ops::Deref;
-
             self.deref().deep_size_of()
         }
 
-        fn deep_size_of_children(&self, _: &mut Context) -> usize {
-            0
+        fn deep_size_of_children(&self, ctx: &mut Context) -> usize {
+            use std::ops::Deref;
+            self.deref().deep_size_of_children(ctx)
         }
     }
 
     impl DeepSizeOf for Bytes {
         fn deep_size_of(&self) -> usize {
             use std::ops::Deref;
-
             self.deref().deep_size_of()
         }
 
-        fn deep_size_of_children(&self, _: &mut Context) -> usize {
-            0
-        }
+        fn deep_size_of_children(&self, ctx: &mut Context) -> usize {
+            use std::ops::Deref;
+            self.deref().deep_size_of_children(ctx)        }
     }
 }
