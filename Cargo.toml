@@ -22,7 +22,7 @@ hashbrown = { version = "^0.9", optional = true }
 chrono = { version = "^0.4", optional = true }
 tokio = { version = "^1.1", optional = true, default-features = false }
 actix = { version = "^0.11.0", optional = true, default-features = false }
-candid = { git = "https://github.com/dscvr-one/candid.git", rev = "5a8ee9", optional = true }
+candid = { git = "https://github.com/dscvr-one/candid.git", rev = "65d73d6", optional = true }
 serde_bytes = { version = "0.11", optional = true }
 
 [dev-dependencies]
